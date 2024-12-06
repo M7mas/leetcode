@@ -483,6 +483,51 @@ func powInt(x, y int) int {
 	return int(math.Pow(float64(x), float64(y)))
 }
 
+func maxCount(banned []int, n int, maxSum int) int {
+	// make a safe set
+	// 1- make a set that could be used for sum.
+	// how? search from 1 -> n
+	// if the number > maxSum remove it
+	// if the number in banned remove it
+	slices.Sort(banned)
+	safeSet := []int{}
+	for i := 1; i <= n; i++ {
+		if i > maxSum {
+			continue
+		} else {
+			tmp := true
+			for _, e := range banned {
+				if i == e {
+					tmp = false
+					break
+				}
+			}
+			if tmp {
+				safeSet = append(safeSet, i)
+			}
+		}
+	}
+	// fmt.Println(safeSet)
+	// 2- find the potintial sum.
+	if len(safeSet) == 0 {
+		return 0
+	}
+
+	temp := 0
+	steps := 0
+	for i := 0; i < len(safeSet); {
+		temp += safeSet[i]
+		steps += 1
+		if temp > maxSum {
+			temp -= safeSet[i]
+			steps -= 1
+		}
+		i++
+	}
+	// fmt.Println(steps)
+	return steps
+}
+
 func isPalindrome(x int) bool {
 	if x < 0 {
 		return false
@@ -527,51 +572,6 @@ func isPalindrome(x int) bool {
 		// }
 	}
 	return false
-}
-
-func maxCount(banned []int, n int, maxSum int) int {
-	// make a safe set
-	// 1- make a set that could be used for sum.
-	// how? search from 1 -> n
-	// if the number > maxSum remove it
-	// if the number in banned remove it
-	slices.Sort(banned)
-	safeSet := []int{}
-	for i := 1; i <= n; i++ {
-		if i > maxSum {
-			continue
-		} else {
-			tmp := true
-			for _, e := range banned {
-				if i == e {
-					tmp = false
-					break
-				}
-			}
-			if tmp {
-				safeSet = append(safeSet, i)
-			}
-		}
-	}
-	// fmt.Println(safeSet)
-	// 2- find the potintial sum.
-	if len(safeSet) == 0 {
-		return 0
-	}
-
-	temp := 0
-	steps := 0
-	for i := 0; i < len(safeSet); {
-		temp += safeSet[i]
-		steps += 1
-		if temp > maxSum {
-			temp -= safeSet[i]
-			steps -= 1
-		}
-		i++
-	}
-	// fmt.Println(steps)
-	return steps
 }
 
 func main() {
