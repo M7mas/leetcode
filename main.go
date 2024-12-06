@@ -529,6 +529,51 @@ func isPalindrome(x int) bool {
 	return false
 }
 
+func maxCount(banned []int, n int, maxSum int) int {
+	// make a safe set
+	// 1- make a set that could be used for sum.
+	// how? search from 1 -> n
+	// if the number > maxSum remove it
+	// if the number in banned remove it
+	slices.Sort(banned)
+	safeSet := []int{}
+	for i := 1; i <= n; i++ {
+		if i > maxSum {
+			continue
+		} else {
+			tmp := true
+			for _, e := range banned {
+				if i == e {
+					tmp = false
+					break
+				}
+			}
+			if tmp {
+				safeSet = append(safeSet, i)
+			}
+		}
+	}
+	// fmt.Println(safeSet)
+	// 2- find the potintial sum.
+	if len(safeSet) == 0 {
+		return 0
+	}
+
+	temp := 0
+	steps := 0
+	for i := 0; i < len(safeSet); {
+		temp += safeSet[i]
+		steps += 1
+		if temp > maxSum {
+			temp -= safeSet[i]
+			steps -= 1
+		}
+		i++
+	}
+	// fmt.Println(steps)
+	return steps
+}
+
 func main() {
 	{
 		// fmt.Println(twoSum([]int{2, 7, 11, 15}, 9))
@@ -608,7 +653,11 @@ func main() {
 		// fmt.Println(largestRectangleArea([]int{2, 4}))
 		// fmt.Println(largestRectangleArea([]int{2}))
 		// fmt.Println(largestRectangleArea([]int{}))
+		// maxCount([]int{1, 6, 5}, 5, 6)
+		// maxCount([]int{1, 2, 3, 4, 5, 6, 7}, 8, 1)
+		// maxCount([]int{11}, 7, 50)
 	}
+
 	fmt.Println(isPalindrome(10))
 	fmt.Println(isPalindrome(1))
 	fmt.Println(isPalindrome(121))
